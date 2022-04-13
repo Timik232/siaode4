@@ -6,23 +6,9 @@
 3)	Вывести названия профилей и год начала действия учебного плана заданного направления.
 4)	Удалить планы срок действия которых истек при прошествии 4-х лет.
 */
-#include <iostream>
+#include "Header.h"
 #include <iomanip>
-using namespace std;
-struct Plan
-{
-    int shifr_direct;
-    string name_direct;
-    int shifr_profile;
-    string name_profile;
-    int start_year;
-};
-struct Table
-{
-    Plan strings [100];
-    int max_size;
-    int cur_size;
-};
+
 void Input_struct(Plan& P)
 {
     cout << "Enter cipher of direction\n";
@@ -58,13 +44,24 @@ void Input(Table &T, Plan &P) //ввод значений структуры
 void Output(Table &T) //вывод всех данных структуры
 {
     cout <<  "Cipher of direction  " << " Name of direction  " << " Cipher of profile  " << " Name of profile  " << setw(10) << " Year\n";
-    for (int i = 0; i < T.max_size; i++)
+    for (int i = 0; i < T.cur_size; i++)
     {
         cout << setw(19) << T.strings[i].shifr_direct;
         cout << setw(20) << T.strings[i].name_direct;
         cout << setw(19) << T.strings[i].shifr_profile;
         cout << setw(18) << T.strings[i].name_profile;
         cout << setw(12) << T.strings[i].start_year;
+        cout << endl;
+    }
+}
+//Вывести названия профилей и год начала действия учебного плана заданного направления.
+void print_profiles(Table &T)
+{
+    cout << " Name of profile  " << " Year of start \n";
+    for (int i = 0; i < T.cur_size; i++)
+    {
+        cout << setw(15) << T.strings[i].name_profile;
+        cout << setw(15) << T.strings[i].start_year;
         cout << endl;
     }
 }
@@ -83,6 +80,7 @@ void Insert(Table& T, Plan &P) //вставка элемента в структ
             flag = true;
             nomer = i; //запоминаем номер
         }
+        i++;
     }
     if (!flag)
         cout << "There is no element with this cipher\n";
@@ -90,17 +88,42 @@ void Insert(Table& T, Plan &P) //вставка элемента в структ
     {
         cout << "Enter Plan\n";
         Input_struct(P);
-        T.strings[T.max_size+1] = P;
-        for (int i = T.max_size; i > nomer;)
-            swap(T.strings[i + 1], T.strings[i]);
+        T.cur_size += 1;
+        T.strings[T.cur_size+1] = P;
+        for (int i = T.cur_size; i > nomer; i--)
+        {
+            //cout << 1;         
+            swap(T.strings[i+1],T.strings[i]); //посмотреть почему не меняет местами
+        }
+        T.strings[nomer-1] = P;
     }
+    cout << T.strings[2].start_year;
+    cout << "Inserted \n";
+}
+//Удалить планы, срок действия которых истек при прошествии 4-х лет
+void Delete(Table& T)
+{
+    int now = 2022;
+    for (int i = 0; i < T.cur_size; i++)
+    {
+        if (now - T.strings[i].start_year > 4)
+        {
+            for (int j = T.cur_size-1; j > i; j--)
+                swap(T.strings[i], T.strings[i+1]);
+        }
+        
+    }
+    T.cur_size -= 1;
 }
 int main()
 {
     Table Titul;
     Plan P;
     Input(Titul, P);
-    //Insert(Titul,P);
+    Insert(Titul,P);
     Output(Titul); //вывод всех данных структуры
+    print_profiles(Titul); //вывод профиля и года
+    int b;
+    cin >> b;
 }
 
