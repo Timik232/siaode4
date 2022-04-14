@@ -89,13 +89,13 @@ void Insert(Table& T, Plan &P) //вставка элемента в структ
         cout << "Enter Plan\n";
         Input_struct(P);
         T.cur_size += 1;
-        T.strings[T.cur_size+1] = P;
-        for (int i = T.cur_size; i > nomer; i--)
-        {
-            //cout << 1;         
+        T.strings[T.cur_size] = P;
+        for (int i = T.cur_size-1; i > nomer; i--)
+        {         
             swap(T.strings[i+1],T.strings[i]); //посмотреть почему не меняет местами
         }
-        T.strings[nomer-1] = P;
+        //T.strings[nomer] = P;
+        //swap(T.strings[2], T.strings[1]);
     }
     cout << T.strings[2].start_year;
     cout << "Inserted \n";
