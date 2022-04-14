@@ -90,14 +90,11 @@ void Insert(Table& T, Plan &P) //вставка элемента в структ
         Input_struct(P);
         T.cur_size += 1;
         T.strings[T.cur_size] = P;
-        for (int i = T.cur_size-1; i > nomer; i--)
-        {         
+        for (int i = T.cur_size-1; i >= nomer; i--)
+        { 
             swap(T.strings[i+1],T.strings[i]); //посмотреть почему не меняет местами
         }
-        //T.strings[nomer] = P;
-        //swap(T.strings[2], T.strings[1]);
     }
-    cout << T.strings[2].start_year;
     cout << "Inserted \n";
 }
 //Удалить планы, срок действия которых истек при прошествии 4-х лет
@@ -108,21 +105,25 @@ void Delete(Table& T)
     {
         if (now - T.strings[i].start_year > 4)
         {
-            for (int j = T.cur_size-1; j > i; j--)
+            for (int j = i; j < T.cur_size; j++)
                 swap(T.strings[i], T.strings[i+1]);
-        }
-        
+            T.cur_size -= 1;
+        }       
     }
-    T.cur_size -= 1;
+    
 }
 int main()
 {
     Table Titul;
     Plan P;
     Input(Titul, P);
-    Insert(Titul,P);
-    Output(Titul); //вывод всех данных структуры
     print_profiles(Titul); //вывод профиля и года
+    Insert(Titul,P);
+    print_profiles(Titul);
+    //Output(Titul); //вывод всех данных структуры
+    Delete(Titul);
+    cout << "After deleting\n";
+    print_profiles(Titul);
     int b;
     cin >> b;
 }
