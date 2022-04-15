@@ -94,8 +94,9 @@ void Insert(Table& T, Plan &P) //вставка элемента в структ
         { 
             swap(T.strings[i+1],T.strings[i]); //посмотреть почему не меняет местами
         }
+        cout << "Inserted \n";
     }
-    cout << "Inserted \n";
+    
 }
 //Удалить планы, срок действия которых истек при прошествии 4-х лет
 void Delete(Table& T)
