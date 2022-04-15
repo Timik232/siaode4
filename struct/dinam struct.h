@@ -2,7 +2,7 @@
 #ifndef __DINAM_STRUCT_H__
 #define __DINAM_STRUCT_H__
 #include <iostream>
-#include <malloc.h>
+#include "malloc.h"
 using namespace std;
 struct Plan
 {
@@ -14,8 +14,8 @@ struct Plan
 };
 struct Table
 {
-    Plan strings[100];
-    Plan* strings = (Plan*)malloc(1 * sizeof(int));
+    //Plan strings[100];
+    Plan* strings;
     int max_size;
     int cur_size;
 };

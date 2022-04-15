@@ -1,4 +1,4 @@
-/*Титул учебного плана (УП) направления ВУЗа. Структура записи о плане: шифр направления (например, 090304),
+﻿/*Титул учебного плана (УП) направления ВУЗа. Структура записи о плане: шифр направления (например, 090304),
 название направления, шифр профиля (например,090304_1), название профиля (например, Мобильные приложения), год начала действия УП.
 Операции
 1)	Заполнить запись по одному учебному плану с клавиатуры.
@@ -33,13 +33,15 @@ void Input(Table& T, Plan& P)  //ввод значений структуры
             cout << "Invalid input\n";
         else flag = false;
     }
+    T.strings = new Plan[T.max_size];
     T.cur_size = 0;
-    
+
     for (int i = 0; i < T.max_size; i++)
     {
         Input_struct(P);
         T.strings[i] = P;
         T.cur_size += 1;
+        
     }
 }
 void Output(Table& T) //вывод всех данных структуры
@@ -68,6 +70,7 @@ void print_profiles(Table& T)
 }
 void Insert(Table& T, Plan& P) //вставка элемента в структуру
 {
+    
     int shifr;
     cout << "Enter cipher of direction to insert new plan\n";
     cin >> shifr;
@@ -87,31 +90,72 @@ void Insert(Table& T, Plan& P) //вставка элемента в структ
         cout << "There is no element with this cipher\n";
     else
     {
+        int count = 0;
         cout << "Enter Plan\n";
         Input_struct(P);
         T.cur_size += 1;
-        T.strings[T.cur_size] = P;
-        for (int i = T.cur_size - 1; i >= nomer; i--)
+        Plan* more = new Plan[T.cur_size];
+        for (int i = 0; i < T.cur_size+1; i++)
         {
-            swap(T.strings[i + 1], T.strings[i]); 
+            if (i != nomer)
+            {
+                more[i] = T.strings[count];
+                count += 1;
+            }
+            else
+            {
+                more[i] = P;
+            }
         }
+        delete[] T.strings;
+        T.strings =new Plan[T.cur_size];
+        for (int i = 0; i < T.cur_size; i++)
+            T.strings[i] = more[i];
+        delete[] more;
+        //for (int i = 0; i < T.cur_size; i++)
+            
+        cout << T.strings[1].start_year;
+        cout << "Inserted \n";
     }
-    cout << "Inserted \n";
+   
 }
 //Удалить планы, срок действия которых истек при прошествии 4-х лет
 void Delete(Table& T)
 {
+    int wildel[100];
+    int count = 0;
+    int was = T.cur_size;
     int now = 2022;
     for (int i = 0; i < T.cur_size; i++)
     {
         if (now - T.strings[i].start_year > 4)
         {
-            for (int j = i; j < T.cur_size; j++)
-                swap(T.strings[i], T.strings[i + 1]);
+            wildel[count] = i;
+            count += 1;
             T.cur_size -= 1;
         }
     }
-
+    Plan* less = new Plan[T.cur_size];
+    int newcount = 0;
+    for (int i = 0; i < was; i++)
+    {
+        bool flag = false;
+        for (int j = 0; j < count; j++)
+            if (i == wildel[count])
+                flag = true;
+        if (!flag)
+        {
+            less[newcount] = T.strings[i];
+            newcount += 1;
+        }
+    }
+    delete[] T.strings;
+    //T.strings = less;
+    T.strings = new Plan[T.cur_size];
+    for (int i = 0; i < T.cur_size; i++)
+        T.strings[i] = less[i];
+    
+    delete[] less;
 }
 int main()
 {
@@ -125,6 +169,7 @@ int main()
     Delete(Titul);
     cout << "After deleting\n";
     print_profiles(Titul);
+    delete[] Titul.strings;
     int b;
     cin >> b;
 }
